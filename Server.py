@@ -15,14 +15,15 @@ class WordCount(archivoServer.WordCountServicer):
         if 0 < option < 3:
             contenido = archivoPython.WordCount(files, option)
             return archivoClient.fileData(fileData=contenido)
-	if option == 3:
-		return archivoClient.fileData(fileData=showWorkers)
-	if option == 4:
-		createWorker()
-		return archivoClient.fileData(fileData="Worker creado con exito")
-	if option == 5:
-		deleteWorker(idWorker)
-		return archivoClient.fileData(fileData="Worker eliminado correctamente")
+        if option == 3:
+            contenido = showWorkers()
+            return archivoClient.fileData(fileData=contenido)
+        if option == 4:
+            createWorker()
+            return archivoClient.fileData(fileData="Worker creado con exito")
+        if option == 5:
+            deleteWorker(idWorker)
+            return archivoClient.fileData(fileData="Worker eliminado correctamente")
 
 def StartServer():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -43,13 +44,16 @@ def createWorker():
     WORKERS_ID += 1
 
 def startWorker():
-    ...
-
+    return;
+def deleteWorker(idWorker):
+    global WORKERS
+    WORKERS.remove(idWorker)
 def showWorkers():
-	wActivos = ""
-	for i in range (len(WORKERS)):
-		wActivos += "Worker con ID --> " + WORKERS[i] + "esta activo" + "\n"
-	return wActivos
+    wActivos = ""
+    for i in range(len(WORKERS)):
+        wActivos += "Worker --> " + str(WORKERS[i]) + " activo\n"
+    return wActivos
+
 
 if __name__ == '__main__':
     StartServer()

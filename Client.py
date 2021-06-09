@@ -28,6 +28,9 @@ def runClient():
                     suma += valor
             if option==1:
                 print(f"\n\n\nSe han analizado en total {len(files)-1} y tienen un total de {suma} palabras diferentes")
+            if option != 1 and option != 2:
+                response = stub.elContador(archivoCliente.getInformation(fileName="", option=option, idWorker=workerID))
+                print(response.fileData)
             print(f"{50*'*'}")
             option = menuSelect()
 
