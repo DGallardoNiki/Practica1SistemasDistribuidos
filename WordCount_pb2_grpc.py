@@ -8,7 +8,7 @@ import WordCount_pb2 as WordCount__pb2
 class WordCountStub(object):
     """Servicio que se encarga de recibir la opcion escogida y con la cual el servidor actuara,
     	tambien se encarga de retornar un mensaje vacio en el caso de que no necesitemos
-    	retornar nada, como puede ser después de poner un worker mas o algo por el estilo.
+    	retornar nada, como puede ser despu├ęs de poner un worker mas o algo por el estilo.
     """
 
     def __init__(self, channel):
@@ -32,7 +32,7 @@ class WordCountStub(object):
 class WordCountServicer(object):
     """Servicio que se encarga de recibir la opcion escogida y con la cual el servidor actuara,
     	tambien se encarga de retornar un mensaje vacio en el caso de que no necesitemos
-    	retornar nada, como puede ser después de poner un worker mas o algo por el estilo.
+    	retornar nada, como puede ser despu├ęs de poner un worker mas o algo por el estilo.
     """
 
     def elContador(self, request, context):
@@ -70,7 +70,7 @@ def add_WordCountServicer_to_server(servicer, server):
 class WordCount(object):
     """Servicio que se encarga de recibir la opcion escogida y con la cual el servidor actuara,
     	tambien se encarga de retornar un mensaje vacio en el caso de que no necesitemos
-    	retornar nada, como puede ser después de poner un worker mas o algo por el estilo.
+    	retornar nada, como puede ser despu├ęs de poner un worker mas o algo por el estilo.
     """
 
     @staticmethod

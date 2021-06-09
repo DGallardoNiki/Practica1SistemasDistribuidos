@@ -17,7 +17,7 @@ def WordCount(filename, opc):
 		lisCo.append(lisDif[i] + " " + (str)(fileDa.count(lisDif[i]))+ ", ")
 
 	if opc == 1:
-		return ("Hay un total de " + str(len(lisDif)) + " palabras diferentes")
+		return (str(len(lisDif)))
 	else:
 		strCon = " "
 		return (strCon.join(lisCo))

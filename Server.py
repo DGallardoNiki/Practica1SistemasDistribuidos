@@ -9,8 +9,9 @@ class WordCount(archivoServer.WordCountServicer):
         option = request.option
         files = request.fileName
         idWorker = request.idWorker
-        contenido = archivoPython.WordCount(files, 1)
-        return archivoClient.fileData(fileData=contenido)
+        if 0 < option < 3:
+            contenido = archivoPython.WordCount(files, option)
+            return archivoClient.fileData(fileData=contenido)
 
 def StartServer():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
