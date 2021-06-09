@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+// Servicio que se encarga de recibir la opcion escogida y con la cual el servidor actuara,
+//	tambien se encarga de retornar un mensaje vacio en el caso de que no necesitemos
+//	retornar nada, como puede ser despu├ęs de poner un worker mas o algo por el estilo.
+service WordCount{
+	rpc elContador (getInformation) returns (fileData){}
+	rpc mensajeVacio (emptyData) returns (emptyData){}
+}
+message getInformation{
+	string fileName = 1;
+	int32 option = 2;
+	int32 idWorker = 3;
+}
+
+message fileData{
+	string fileData = 1;
+}
+
+message emptyData{
+	string emptyMessage = 1;
+}
