@@ -16,6 +16,7 @@ def runClient():
         option = menuSelect()
         while option != 6:
             files = file.split(" ")
+            file = ""
             i = 0
             for i in range (i, len(files)-1):
                 response = stub.elContador(archivoCliente.getInformation(fileName=files[i], option=option, idWorker=workerID))
