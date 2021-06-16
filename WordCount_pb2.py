@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0fWordCount.proto\"D\n\x0egetInformation\x12\x10\n\x08\x66ileName\x18\x01 \x01(\t\x12\x0e\n\x06option\x18\x02 \x01(\x05\x12\x10\n\x08idWorker\x18\x03 \x01(\x05\"\x1c\n\x08\x66ileData\x12\x10\n\x08\x66ileData\x18\x01 \x01(\t\"!\n\temptyData\x12\x14\n\x0c\x65mptyMessage\x18\x01 \x01(\t2a\n\tWordCount\x12*\n\nelContador\x12\x0f.getInformation\x1a\t.fileData\"\x00\x12(\n\x0cmensajeVacio\x12\n.emptyData\x1a\n.emptyData\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0fWordCount.proto\"D\n\x0egetInformation\x12\x10\n\x08\x66ileName\x18\x01 \x01(\t\x12\x0e\n\x06option\x18\x02 \x01(\x05\x12\x10\n\x08idWorker\x18\x03 \x01(\x05\"\x1f\n\x0b\x63tosWorkers\x12\x10\n\x08nWorkers\x18\x01 \x01(\x05\"\x1c\n\x08\x66ileData\x12\x10\n\x08\x66ileData\x18\x01 \x01(\t\"0\n\x0f\x66ilesAndOptions\x12\r\n\x05\x66iles\x18\x01 \x01(\t\x12\x0e\n\x06option\x18\x02 \x01(\x05\"!\n\temptyData\x12\x14\n\x0c\x65mptyMessage\x18\x01 \x01(\t2\xdf\x02\n\tWordCount\x12*\n\nelContador\x12\x0f.getInformation\x1a\t.fileData\"\x00\x12/\n\x0e\x63rearContenido\x12\x10.filesAndOptions\x1a\t.fileData\"\x00\x12%\n\x0breponseData\x12\t.fileData\x1a\t.fileData\"\x00\x12)\n\x0c\x63rearWorkers\x12\x0c.ctosWorkers\x1a\t.fileData\"\x00\x12(\n\x0cmensajeVacio\x12\n.emptyData\x1a\n.emptyData\"\x00\x12*\n\tredisList\x12\x10.filesAndOptions\x1a\t.fileData\"\x00\x12)\n\x0cworkerCreate\x12\x0c.ctosWorkers\x1a\t.fileData\"\x00\x12\"\n\x08response\x12\t.fileData\x1a\t.fileData\"\x00\x62\x06proto3'
 )
 
 
@@ -71,6 +71,38 @@ _GETINFORMATION = _descriptor.Descriptor(
 )
 
 
+_CTOSWORKERS = _descriptor.Descriptor(
+  name='ctosWorkers',
+  full_name='ctosWorkers',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='nWorkers', full_name='ctosWorkers.nWorkers', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=89,
+  serialized_end=120,
+)
+
+
 _FILEDATA = _descriptor.Descriptor(
   name='fileData',
   full_name='fileData',
@@ -98,8 +130,47 @@ _FILEDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=89,
-  serialized_end=117,
+  serialized_start=122,
+  serialized_end=150,
+)
+
+
+_FILESANDOPTIONS = _descriptor.Descriptor(
+  name='filesAndOptions',
+  full_name='filesAndOptions',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='files', full_name='filesAndOptions.files', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='option', full_name='filesAndOptions.option', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=152,
+  serialized_end=200,
 )
 
 
@@ -130,12 +201,14 @@ _EMPTYDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=119,
-  serialized_end=152,
+  serialized_start=202,
+  serialized_end=235,
 )
 
 DESCRIPTOR.message_types_by_name['getInformation'] = _GETINFORMATION
+DESCRIPTOR.message_types_by_name['ctosWorkers'] = _CTOSWORKERS
 DESCRIPTOR.message_types_by_name['fileData'] = _FILEDATA
+DESCRIPTOR.message_types_by_name['filesAndOptions'] = _FILESANDOPTIONS
 DESCRIPTOR.message_types_by_name['emptyData'] = _EMPTYDATA
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -146,12 +219,26 @@ getInformation = _reflection.GeneratedProtocolMessageType('getInformation', (_me
   })
 _sym_db.RegisterMessage(getInformation)
 
+ctosWorkers = _reflection.GeneratedProtocolMessageType('ctosWorkers', (_message.Message,), {
+  'DESCRIPTOR' : _CTOSWORKERS,
+  '__module__' : 'WordCount_pb2'
+  # @@protoc_insertion_point(class_scope:ctosWorkers)
+  })
+_sym_db.RegisterMessage(ctosWorkers)
+
 fileData = _reflection.GeneratedProtocolMessageType('fileData', (_message.Message,), {
   'DESCRIPTOR' : _FILEDATA,
   '__module__' : 'WordCount_pb2'
   # @@protoc_insertion_point(class_scope:fileData)
   })
 _sym_db.RegisterMessage(fileData)
+
+filesAndOptions = _reflection.GeneratedProtocolMessageType('filesAndOptions', (_message.Message,), {
+  'DESCRIPTOR' : _FILESANDOPTIONS,
+  '__module__' : 'WordCount_pb2'
+  # @@protoc_insertion_point(class_scope:filesAndOptions)
+  })
+_sym_db.RegisterMessage(filesAndOptions)
 
 emptyData = _reflection.GeneratedProtocolMessageType('emptyData', (_message.Message,), {
   'DESCRIPTOR' : _EMPTYDATA,
@@ -169,8 +256,8 @@ _WORDCOUNT = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=154,
-  serialized_end=251,
+  serialized_start=238,
+  serialized_end=589,
   methods=[
   _descriptor.MethodDescriptor(
     name='elContador',
@@ -183,12 +270,72 @@ _WORDCOUNT = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='crearContenido',
+    full_name='WordCount.crearContenido',
+    index=1,
+    containing_service=None,
+    input_type=_FILESANDOPTIONS,
+    output_type=_FILEDATA,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='reponseData',
+    full_name='WordCount.reponseData',
+    index=2,
+    containing_service=None,
+    input_type=_FILEDATA,
+    output_type=_FILEDATA,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='crearWorkers',
+    full_name='WordCount.crearWorkers',
+    index=3,
+    containing_service=None,
+    input_type=_CTOSWORKERS,
+    output_type=_FILEDATA,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='mensajeVacio',
     full_name='WordCount.mensajeVacio',
-    index=1,
+    index=4,
     containing_service=None,
     input_type=_EMPTYDATA,
     output_type=_EMPTYDATA,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='redisList',
+    full_name='WordCount.redisList',
+    index=5,
+    containing_service=None,
+    input_type=_FILESANDOPTIONS,
+    output_type=_FILEDATA,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='workerCreate',
+    full_name='WordCount.workerCreate',
+    index=6,
+    containing_service=None,
+    input_type=_CTOSWORKERS,
+    output_type=_FILEDATA,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='response',
+    full_name='WordCount.response',
+    index=7,
+    containing_service=None,
+    input_type=_FILEDATA,
+    output_type=_FILEDATA,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

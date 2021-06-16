@@ -5,7 +5,14 @@ syntax = "proto3";
 //	retornar nada, como puede ser despu├ęs de poner un worker mas o algo por el estilo.
 service WordCount{
 	rpc elContador (getInformation) returns (fileData){}
+	rpc crearContenido (filesAndOptions) returns (fileData){}
+	rpc reponseData (fileData) returns (fileData){}
+	rpc crearWorkers (ctosWorkers) returns (fileData){}
 	rpc mensajeVacio (emptyData) returns (emptyData){}
+
+	rpc redisList (filesAndOptions) returns (fileData){}
+	rpc workerCreate (ctosWorkers) returns (fileData){}
+	rpc response (fileData) returns (fileData){}
 }
 message getInformation{
 	string fileName = 1;
@@ -13,10 +20,17 @@ message getInformation{
 	int32 idWorker = 3;
 }
 
+message ctosWorkers{
+	int32 nWorkers = 1;
+}
 message fileData{
 	string fileData = 1;
 }
 
+message filesAndOptions{
+	string files = 1;
+	int32 option = 2;
+}
 message emptyData{
 	string emptyMessage = 1;
 }

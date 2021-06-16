@@ -3,38 +3,49 @@ import WordCount_pb2_grpc as archivoServer
 import ArchivoContador as archivoPython
 import grpc
 from concurrent import futures
-
+import redis
 file = ""
 workerID = 0
+primeraInt = True
+ficheroRedis = redis.StrictRedis(host='localhost', port=6379, db=0)
+
 def runClient():
     with grpc.insecure_channel('localhost:50051') as channel:
         global workerID
         global file
+        global ficheroRedis
         stub = archivoServer.WordCountStub(channel)
         suma = 0
         valor = 0
+        nWorkers = 0
+        option = 0
+        #print(ficheroRedis.lrange('Resultados', 0, -1)
+
+        if primeraInt:
+            nWorkers = workerSelect()
+            response = stub.crearWorkers(archivoCliente.ctosWorkers(nWorkers=nWorkers))
+            print(response.fileData)
         option = menuSelect()
         while option != 6:
-            files = file.split(" ")
-            file = ""
-            i = 0
-            for i in range (i, len(files)-1):
-                response = stub.elContador(archivoCliente.getInformation(fileName=files[i], option=option, idWorker=workerID))
-                if option == 2:
-                    print(f"\n\n\nEl contenido del fichero {files[i]} es: \n\n{response.fileData}")
-                    print(f"{50*'*'}")
-                if option == 1:
-                    valor = int(response.fileData)
-                    print(f"\n\n\nEl fichero {files[i]} tiene un total de {valor} palabras diferentes")
-                    suma += valor
-            if option==1:
-                print(f"\n\n\nSe han analizado en total {len(files)-1} y tienen un total de {suma} palabras diferentes")
-            if option != 1 and option != 2:
-                response = stub.elContador(archivoCliente.getInformation(fileName="", option=option, idWorker=workerID))
+            while response.fileData != None:
+                print(f"{50*'*'}")
                 print(response.fileData)
-            print(f"{50*'*'}")
+            if 0 < option < 3:
+                file = file[:-1]
+                response = stub.crearContenido(archivoCliente.filesAndOptions(files=file, option=option))
+            if option == 3:
+                response = stub.elContador(archivoCliente.getInformation(fileName="", option=option, idWorker=0))
+                print(response.fileData)
+            contenidoFichero = stub.response(archivoCliente.fileData(fileData=""))
+            file = ""
             option = menuSelect()
 
+
+
+def workerSelect():
+    global primeraInt
+    primeprimeraInt = False
+    return int(input("Introduzca el numero de Workers que se crearan: "))
 
 def menuSelect():
     global file

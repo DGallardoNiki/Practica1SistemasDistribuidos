@@ -4,54 +4,119 @@ import ArchivoContador as archivoPython
 import grpc
 from concurrent import futures
 from multiprocessing import Process
+import redis
+from os import system
 
 WORKERS = []
 WORKERS_ID = 0
+suma_palabras = 0
+concurrenciaPalabras = ""
+ficherosRedis = redis.StrictRedis(host='localhost', port=6379, db=0)
+option = 0
+responseContenido = ""
 class WordCount(archivoServer.WordCountServicer):
-    def elContador(self, request, context):
+    # Add nombre de los ficheros a la cola del redis
+    def crearContenido(self, request, context):
+        global ficherosRedis
         option = request.option
-        files = request.fileName
+        ficherosRedis.flushall()
+        files = request.files
+        files = files.split(" ")
+        i = 0
+        while i < len(files):
+            if files[i] != "None" and files[i] != "NoneType":
+                if option == 1:
+                    mensaje = "CW "+files[i]
+                    ficherosRedis.rpush('Fichero', mensaje)
+                if option == 2:
+                    mensaje = "WC "+files[i]
+                    ficherosRedis.rpush('Fichero', mensaje)
+                i += 1
+        return archivoClient.fileData(fileData=str(len(files)))
+
+    def crearWorkers(self, request, context):
+        idWorker = request.nWorkers
+        i = 0
+        for i in range(i, idWorker):
+                crearWorker()
+        return archivoClient.fileData(fileData="He creado los workers que se me han pedido, jeje xD")
+
+    def elContador(self, request, context):
+        global option
+        option = request.option
         idWorker = request.idWorker
-        if 0 < option < 3:
-            contenido = archivoPython.WordCount(files, option)
-            return archivoClient.fileData(fileData=contenido)
+        i=0         
         if option == 3:
             contenido = showWorkers()
             return archivoClient.fileData(fileData=contenido)
-        if option == 4:
-            createWorker()
-            return archivoClient.fileData(fileData="Worker creado con exito")
-        if option == 5:
-            deleteWorker(idWorker)
-            return archivoClient.fileData(fileData="Worker eliminado correctamente")
+        else:
+            return archivoClient.fileData(fileData="Nada")
+
+    def response(self, request, context):
+        global ficherosRedis
+        resultados = ""
+        while ficherosRedis.llen('Resultados') > 0:
+            resultado = ficherosRedis.lpop('Resultados')
+            if resultado != None and resultado != "":
+                resultado = resultado.decode("utf-8")
+                resultados += resultado
+       return archivoClient.fileData(fileData=resultados)
+
+
 
 def StartServer():
+    global ficherosRedis
+    ficherosRedis.flushall()
+    #ficherosRedis.rpush('Fichero', "")
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    createWorker()
     archivoServer.add_WordCountServicer_to_server(WordCount(), server)
     server.add_insecure_port('[::]:50051')
     print("Servidor iniciado")
     server.start()
     server.wait_for_termination()
+Workers = []
+idWorker = 0
+def crearWorker():
+    global Worker
+    global idWorker
+    procesoWorker = Process(target=iniciarWorker, args=(idWorker, ))
+    procesoWorker.start()
+    Workers.append(procesoWorker)
+    idWorker += 1
 
-def createWorker():
-    global WORKERS
-    global WORKERS_ID
-    proc = Process(target=startWorker, args=(WORKERS_ID,))
-    proc.start()
-    WORKERS.append(WORKERS_ID)
-    print(WORKERS[WORKERS_ID])
-    WORKERS_ID += 1
+def iniciarWorker(idWorker):
+    global responseContenido
+    global resultadoRedis
+    option = 0
+    suma = 0
+    i = 0
+    while True:
+        i = 0
+        if ficherosRedis.llen('Fichero') > 0:
+            nombreFichero = (ficherosRedis.lpop('Fichero'))#.decode("utf-8")
+            if nombreFichero != None and nombreFichero != "":
+                nombreFichero = (nombreFichero.decode("utf-8")).split(" ")
+                if nombreFichero[0] == "WC":
+                    option = 2
+                else:
+                    option = 1
+                responseContenido = archivoPython.WordCount(nombreFichero[1], option)
+                ficherosRedis.rpush('Resultados', responseContenido)
+        if ficherosRedis.llen('Ficheros') < 1 and ficherosRedis.llen('Resultados') > 0 and option == 1 and ficherosRedis.llen('Respuestas') > 1:
+            lista = ""
+            while i < ficherosRedis.llen('Resultados'):
+                lista = ficherosRedis.lrange('Resultados', 0, -1)
+                bytesObj = lista[i]
+                cadena = bytesObj.decode("utf-8")
+                suma += int(cadena)
+                i += 1
+            ficherosRedis.rpush('Resultados', suma)
 
-def startWorker():
-    return;
-def deleteWorker(idWorker):
-    global WORKERS
-    WORKERS.remove(idWorker)
+
 def showWorkers():
     wActivos = ""
-    for i in range(len(WORKERS)):
-        wActivos += "Worker --> " + str(WORKERS[i]) + " activo\n"
+    for i in range(len(Workers)):
+        wActivos += "Worker --> " + str(Workers[i]) + "\n"
     return wActivos
 
 

@@ -22,10 +22,40 @@ class WordCountStub(object):
                 request_serializer=WordCount__pb2.getInformation.SerializeToString,
                 response_deserializer=WordCount__pb2.fileData.FromString,
                 )
+        self.crearContenido = channel.unary_unary(
+                '/WordCount/crearContenido',
+                request_serializer=WordCount__pb2.filesAndOptions.SerializeToString,
+                response_deserializer=WordCount__pb2.fileData.FromString,
+                )
+        self.reponseData = channel.unary_unary(
+                '/WordCount/reponseData',
+                request_serializer=WordCount__pb2.fileData.SerializeToString,
+                response_deserializer=WordCount__pb2.fileData.FromString,
+                )
+        self.crearWorkers = channel.unary_unary(
+                '/WordCount/crearWorkers',
+                request_serializer=WordCount__pb2.ctosWorkers.SerializeToString,
+                response_deserializer=WordCount__pb2.fileData.FromString,
+                )
         self.mensajeVacio = channel.unary_unary(
                 '/WordCount/mensajeVacio',
                 request_serializer=WordCount__pb2.emptyData.SerializeToString,
                 response_deserializer=WordCount__pb2.emptyData.FromString,
+                )
+        self.redisList = channel.unary_unary(
+                '/WordCount/redisList',
+                request_serializer=WordCount__pb2.filesAndOptions.SerializeToString,
+                response_deserializer=WordCount__pb2.fileData.FromString,
+                )
+        self.workerCreate = channel.unary_unary(
+                '/WordCount/workerCreate',
+                request_serializer=WordCount__pb2.ctosWorkers.SerializeToString,
+                response_deserializer=WordCount__pb2.fileData.FromString,
+                )
+        self.response = channel.unary_unary(
+                '/WordCount/response',
+                request_serializer=WordCount__pb2.fileData.SerializeToString,
+                response_deserializer=WordCount__pb2.fileData.FromString,
                 )
 
 
@@ -41,7 +71,43 @@ class WordCountServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def crearContenido(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def reponseData(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def crearWorkers(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def mensajeVacio(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def redisList(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def workerCreate(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def response(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -55,10 +121,40 @@ def add_WordCountServicer_to_server(servicer, server):
                     request_deserializer=WordCount__pb2.getInformation.FromString,
                     response_serializer=WordCount__pb2.fileData.SerializeToString,
             ),
+            'crearContenido': grpc.unary_unary_rpc_method_handler(
+                    servicer.crearContenido,
+                    request_deserializer=WordCount__pb2.filesAndOptions.FromString,
+                    response_serializer=WordCount__pb2.fileData.SerializeToString,
+            ),
+            'reponseData': grpc.unary_unary_rpc_method_handler(
+                    servicer.reponseData,
+                    request_deserializer=WordCount__pb2.fileData.FromString,
+                    response_serializer=WordCount__pb2.fileData.SerializeToString,
+            ),
+            'crearWorkers': grpc.unary_unary_rpc_method_handler(
+                    servicer.crearWorkers,
+                    request_deserializer=WordCount__pb2.ctosWorkers.FromString,
+                    response_serializer=WordCount__pb2.fileData.SerializeToString,
+            ),
             'mensajeVacio': grpc.unary_unary_rpc_method_handler(
                     servicer.mensajeVacio,
                     request_deserializer=WordCount__pb2.emptyData.FromString,
                     response_serializer=WordCount__pb2.emptyData.SerializeToString,
+            ),
+            'redisList': grpc.unary_unary_rpc_method_handler(
+                    servicer.redisList,
+                    request_deserializer=WordCount__pb2.filesAndOptions.FromString,
+                    response_serializer=WordCount__pb2.fileData.SerializeToString,
+            ),
+            'workerCreate': grpc.unary_unary_rpc_method_handler(
+                    servicer.workerCreate,
+                    request_deserializer=WordCount__pb2.ctosWorkers.FromString,
+                    response_serializer=WordCount__pb2.fileData.SerializeToString,
+            ),
+            'response': grpc.unary_unary_rpc_method_handler(
+                    servicer.response,
+                    request_deserializer=WordCount__pb2.fileData.FromString,
+                    response_serializer=WordCount__pb2.fileData.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -91,6 +187,57 @@ class WordCount(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def crearContenido(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/WordCount/crearContenido',
+            WordCount__pb2.filesAndOptions.SerializeToString,
+            WordCount__pb2.fileData.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def reponseData(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/WordCount/reponseData',
+            WordCount__pb2.fileData.SerializeToString,
+            WordCount__pb2.fileData.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def crearWorkers(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/WordCount/crearWorkers',
+            WordCount__pb2.ctosWorkers.SerializeToString,
+            WordCount__pb2.fileData.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def mensajeVacio(request,
             target,
             options=(),
@@ -104,5 +251,56 @@ class WordCount(object):
         return grpc.experimental.unary_unary(request, target, '/WordCount/mensajeVacio',
             WordCount__pb2.emptyData.SerializeToString,
             WordCount__pb2.emptyData.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def redisList(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/WordCount/redisList',
+            WordCount__pb2.filesAndOptions.SerializeToString,
+            WordCount__pb2.fileData.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def workerCreate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/WordCount/workerCreate',
+            WordCount__pb2.ctosWorkers.SerializeToString,
+            WordCount__pb2.fileData.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def response(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/WordCount/response',
+            WordCount__pb2.fileData.SerializeToString,
+            WordCount__pb2.fileData.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
