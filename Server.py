@@ -54,14 +54,17 @@ class WordCount(archivoServer.WordCountServicer):
 
     def response(self, request, context):
         global ficherosRedis
-        resultados = ""
-        while ficherosRedis.llen('Resultados') > 0:
+        resultados = "-"
+        valores = False
+        while ficherosRedis.llen('Resultados') > 0 and ficherosRedis.llen('Ficheros') == 0:
+            print("Hola, hay resultados y no hay tareas")
+            valores = True
             resultado = ficherosRedis.lpop('Resultados')
             if resultado != None and resultado != "":
-                resultados = resultado.decode("utf-8")
-                resultados += resultados + " "
-                print(resultados)
-        resultados = resultados[:-1]
+                resultado = resultado.decode("utf-8")
+                resultados += resultado + " "
+        if valores:
+            resultados = resultados[:-1]
         return archivoClient.fileData(fileData=resultados)
 
 
@@ -103,13 +106,15 @@ def iniciarWorker(idWorker):
                 else:
                     option = 1
                 responseContenido = archivoPython.WordCount(nombreFichero[1], option)
+                print(responseContenido)
                 ficherosRedis.rpush('Resultados', responseContenido)
-        if ficherosRedis.llen('Ficheros') < 1 and ficherosRedis.llen('Resultados') > 0 and option == 1 and ficherosRedis.llen('Respuestas') > 1:
+        if ficherosRedis.llen('Ficheros') == 0 and ficherosRedis.llen('Resultados') > 0 and option == 1 and ficherosRedis.llen('Resultados') > 1:
             lista = ""
             while i < ficherosRedis.llen('Resultados'):
                 lista = ficherosRedis.lrange('Resultados', 0, -1)
                 bytesObj = lista[i]
                 cadena = bytesObj.decode("utf-8")
+                print(cadena)
                 suma += int(cadena)
                 i += 1
             ficherosRedis.rpush('Resultados', suma)
