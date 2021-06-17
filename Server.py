@@ -100,7 +100,6 @@ def iniciarWorker(idWorker):
         i = 0
         #print("Entro cola Ficheros")
         if ficherosRedis.llen('Fichero') > 0:
-            print("Cola ficheros")
             nombreFichero = (ficherosRedis.lpop('Fichero'))#.decode("utf-8")
             if nombreFichero != None and nombreFichero != "":
                 nombreFichero = (nombreFichero.decode("utf-8")).split(" ")
@@ -110,16 +109,16 @@ def iniciarWorker(idWorker):
                     option = 1
                 
                 responseContenido = archivoPython.WordCount(nombreFichero[1], option)
-                print(f"{50*'*'}\n{responseContenido}\n{50*'*'}\n")
                 ficherosRedis.rpush('Resultados', responseContenido)
-        if ficherosRedis.llen('Ficheros') == 0 and ficherosRedis.llen('Resultados') > 0 and option == 1 and ficherosRedis.llen('Resultados') > 1:
+        if ficherosRedis.llen('Ficheros') == 0 and ficherosRedis.llen('Resultados') > 0 and option == 1:
+            print("Cola Resultados")
             lista = ""
             while i < ficherosRedis.llen('Resultados'):
                 lista = ficherosRedis.lrange('Resultados', 0, -1)
                 bytesObj = lista[i]
                 cadena = bytesObj.decode("utf-8")
-                print(f"{50*'*'}\n{cadena}\n{50*'*'}\n")
                 suma += int(cadena)
+                print(f"{50*'*'}\n{cadena}---{suma}\n")
                 i += 1
             ficherosRedis.rpush('Resultados', suma)
 
