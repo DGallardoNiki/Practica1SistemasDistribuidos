@@ -57,7 +57,7 @@ class WordCount(archivoServer.WordCountServicer):
         global ficherosRedis
         resultados = ""
         cantidad = int(request.fileData)
-        print("Me llega un total de --> "+cantidad)
+        print(f"Me llega un total de --> " {cantidad})
         valores = False
         i = 0
         while ficherosRedis.llen('Resultados') > 0 and ficherosRedis.llen('Ficheros') == 0 and i < cantidad:
