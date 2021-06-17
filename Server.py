@@ -54,7 +54,7 @@ class WordCount(archivoServer.WordCountServicer):
 
     def response(self, request, context):
         global ficherosRedis
-        resultados = "-"
+        resultados = ""
         valores = False
         while ficherosRedis.llen('Resultados') > 0 and ficherosRedis.llen('Ficheros') == 0:
             print("Hola, hay resultados y no hay tareas")
@@ -63,6 +63,7 @@ class WordCount(archivoServer.WordCountServicer):
             if resultado != None and resultado != "":
                 resultado = resultado.decode("utf-8")
                 resultados += resultado + " "
+            print(f"{50*'*'}\n\t{resultados}\n{50*'*'}\n")
         if valores:
             resultados = resultados[:-1]
         return archivoClient.fileData(fileData=resultados)
@@ -97,7 +98,9 @@ def iniciarWorker(idWorker):
     i = 0
     while True:
         i = 0
+        #print("Entro cola Ficheros")
         if ficherosRedis.llen('Fichero') > 0:
+            print("Cola ficheros")
             nombreFichero = (ficherosRedis.lpop('Fichero'))#.decode("utf-8")
             if nombreFichero != None and nombreFichero != "":
                 nombreFichero = (nombreFichero.decode("utf-8")).split(" ")
@@ -105,8 +108,9 @@ def iniciarWorker(idWorker):
                     option = 2
                 else:
                     option = 1
+                
                 responseContenido = archivoPython.WordCount(nombreFichero[1], option)
-                print(responseContenido)
+                print(f"{50*'*'}\n{responseContenido}\n{50*'*'}\n")
                 ficherosRedis.rpush('Resultados', responseContenido)
         if ficherosRedis.llen('Ficheros') == 0 and ficherosRedis.llen('Resultados') > 0 and option == 1 and ficherosRedis.llen('Resultados') > 1:
             lista = ""
@@ -114,7 +118,7 @@ def iniciarWorker(idWorker):
                 lista = ficherosRedis.lrange('Resultados', 0, -1)
                 bytesObj = lista[i]
                 cadena = bytesObj.decode("utf-8")
-                print(cadena)
+                print(f"{50*'*'}\n{cadena}\n{50*'*'}\n")
                 suma += int(cadena)
                 i += 1
             ficherosRedis.rpush('Resultados', suma)

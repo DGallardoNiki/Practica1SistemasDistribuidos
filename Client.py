@@ -30,13 +30,14 @@ def runClient():
             if 0 < option < 3:
                 file = file[:-1]
                 contenidoFichero = "1"
+                response = stub.crearContenido(archivoCliente.filesAndOptions(files=file, option=option))
                 #while contenidoFichero != "fileData: - ":
                 #    contenidoFichero = stub.response(archivoCliente.fileData(fileData=""))
                 #    print(contenidoFichero)
             if option == 3:
                 response = stub.elContador(archivoCliente.getInformation(fileName="", option=option, idWorker=0))
                 print(response.fileData)
-            print(stub.response(archivoCliente.fileData(fileData="")))
+            print(stub.response(archivoCliente.fileData(fileData="1")))
             suma += 1
             file = ""
             #option = menuSelect()
