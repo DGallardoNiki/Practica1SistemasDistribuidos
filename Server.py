@@ -60,7 +60,7 @@ class WordCount(archivoServer.WordCountServicer):
             if resultado != None and resultado != "":
                 resultado = resultado.decode("utf-8")
                 resultados += resultado
-       return archivoClient.fileData(fileData=resultados)
+        return archivoClient.fileData(fileData=resultados)
 
 
 

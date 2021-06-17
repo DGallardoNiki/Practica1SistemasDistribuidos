@@ -27,9 +27,6 @@ def runClient():
             print(response.fileData)
         option = menuSelect()
         while option != 6:
-            while response.fileData != None:
-                print(f"{50*'*'}")
-                print(response.fileData)
             if 0 < option < 3:
                 file = file[:-1]
                 response = stub.crearContenido(archivoCliente.filesAndOptions(files=file, option=option))
