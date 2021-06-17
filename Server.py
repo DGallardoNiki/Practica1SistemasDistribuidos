@@ -23,7 +23,8 @@ class WordCount(archivoServer.WordCountServicer):
         files = request.files
         files = files.split(" ")
         i = 0
-        while i < len(files):
+        cantidad = len(files)
+        while i < cantidad:
             if files[i] != "None" and files[i] != "NoneType":
                 if option == 1:
                     mensaje = "CW "+files[i]
@@ -32,7 +33,7 @@ class WordCount(archivoServer.WordCountServicer):
                     mensaje = "WC "+files[i]
                     ficherosRedis.rpush('Fichero', mensaje)
                 i += 1
-        return archivoClient.fileData(fileData=str(len(files)))
+        return archivoClient.fileData(fileData=str(cantidad))
 
     def crearWorkers(self, request, context):
         idWorker = request.nWorkers
@@ -55,8 +56,11 @@ class WordCount(archivoServer.WordCountServicer):
     def response(self, request, context):
         global ficherosRedis
         resultados = ""
+        cantidad = int(request.fileData)
+        print("Me llega un total de --> "+cantidad)
         valores = False
-        while ficherosRedis.llen('Resultados') > 0 and ficherosRedis.llen('Ficheros') == 0:
+        i = 0
+        while ficherosRedis.llen('Resultados') > 0 and ficherosRedis.llen('Ficheros') == 0 and i < cantidad:
             print("Hola, hay resultados y no hay tareas")
             valores = True
             resultado = ficherosRedis.lpop('Resultados')
@@ -64,6 +68,7 @@ class WordCount(archivoServer.WordCountServicer):
                 resultado = resultado.decode("utf-8")
                 resultados += resultado + " "
             print(f"{50*'*'}\n\t{resultados}\n{50*'*'}\n")
+            i += 1
         if valores:
             resultados = resultados[:-1]
         return archivoClient.fileData(fileData=resultados)
@@ -111,14 +116,12 @@ def iniciarWorker(idWorker):
                 responseContenido = archivoPython.WordCount(nombreFichero[1], option)
                 ficherosRedis.rpush('Resultados', responseContenido)
         if ficherosRedis.llen('Ficheros') == 0 and ficherosRedis.llen('Resultados') > 0 and option == 1:
-            print("Cola Resultados")
             lista = ""
             while i < ficherosRedis.llen('Resultados'):
                 lista = ficherosRedis.lrange('Resultados', 0, -1)
                 bytesObj = lista[i]
                 cadena = bytesObj.decode("utf-8")
                 suma += int(cadena)
-                print(f"{50*'*'}\n{cadena}---{suma}\n")
                 i += 1
             ficherosRedis.rpush('Resultados', suma)
 

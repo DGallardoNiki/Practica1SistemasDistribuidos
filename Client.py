@@ -19,25 +19,27 @@ def runClient():
         valor = 0
         nWorkers = 0
         option = 0
+        cantidad = ""
         #print(ficheroRedis.lrange('Resultados', 0, -1)
 
         if primeraInt:
             nWorkers = workerSelect()
             response = stub.crearWorkers(archivoCliente.ctosWorkers(nWorkers=nWorkers))
         option = menuSelect()
-        while suma != 100:
-            
+        file = file[:-1]
+        while suma != 50:
             if 0 < option < 3:
-                file = file[:-1]
                 contenidoFichero = "1"
                 response = stub.crearContenido(archivoCliente.filesAndOptions(files=file, option=option))
+                cantidad = response.fileData
                 #while contenidoFichero != "fileData: - ":
                 #    contenidoFichero = stub.response(archivoCliente.fileData(fileData=""))
                 #    print(contenidoFichero)
             if option == 3:
                 response = stub.elContador(archivoCliente.getInformation(fileName="", option=option, idWorker=0))
                 print(response.fileData)
-            print(stub.response(archivoCliente.fileData(fileData="1")))
+            print(type(cantidad))
+            contenidoFichero = stub.response(archivoCliente.fileData(fileData=cantidad))
             suma += 1
             file = ""
             #option = menuSelect()
