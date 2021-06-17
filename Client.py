@@ -30,15 +30,17 @@ def runClient():
         while option != 6:
             if 0 < option < 3:
                 response = stub.crearContenido(archivoCliente.filesAndOptions(files=file, option=option))
-                cantidad = response.fileData
-                stop = False
-                while not stop:
-                    parar = stub.reponseData(archivoCliente.fileData(fileData=cantidad))
-                    
-                    if parar.fileData == "0":
-                        stop =  True
-                        print("Hey guapo")
                 respuestaResultados = stub.response(archivoCliente.fileData(fileData = cantidad))
+                if  option == 1 :
+                    cantidad = response.fileData
+                    stop = False
+                    while not stop:
+                        parar = stub.reponseData(archivoCliente.fileData(fileData=cantidad))
+                        
+                        if parar.fileData == "0":
+                            stop =  True
+                            print("Hey guapo")
+                
                 print(respuestaResultados.fileData)
 
             if option == 3:

@@ -17,8 +17,11 @@ responseContenido = ""
 class WordCount(archivoServer.WordCountServicer):
     def reponseData (self, request, context):
         parar = "1"
+        #print(f"-----> Ficheros {ficherosRedis.llen('Fichero')}")
+        #print(f"-----> Resultados {ficherosRedis.llen('Resultados')}")
         if ficherosRedis.llen('Fichero') == 0 and ficherosRedis.llen('Resultados') == (int(request.fileData) + 1):
             parar = "0"
+            print("Hey guapo desde el server")
         return archivoClient.fileData(fileData=parar)
 
     # Add nombre de los ficheros a la cola del redis
@@ -73,7 +76,6 @@ class WordCount(archivoServer.WordCountServicer):
             if resultado != None and resultado != "":
                 resultado = resultado.decode("utf-8")
                 resultados += resultado + " "
-            print(f"{50*'*'}\n\t{resultados}\n{50*'*'}\n")
             i += 1
         if valores:
             resultados = resultados[:-1]
@@ -107,6 +109,7 @@ def iniciarWorker(idWorker):
     option = 0
     suma = 0
     i = 0
+    stop = False
     while True:
         i = 0
         #print("Entro cola Ficheros")
@@ -121,14 +124,22 @@ def iniciarWorker(idWorker):
                 
                 responseContenido = archivoPython.WordCount(nombreFichero[1], option)
                 ficherosRedis.rpush('Resultados', responseContenido)
-        if ficherosRedis.llen('Fichero') == 0 and ficherosRedis.llen('Resultados') > 0 and option == 1:
+        ficherosRedis.rpush('Resultados', -1)
+        if ficherosRedis.llen('Fichero') == 0 and option == 1 and ficherosRedis.llen('Resultados') > 0:
             lista = ""
-            while i < ficherosRedis.llen('Resultados'):
+            cadena = 0
+            while stop != True:
                 lista = ficherosRedis.lrange('Resultados', 0, -1)
                 bytesObj = lista[i]
-                cadena = bytesObj.decode("utf-8")
-                suma += int(cadena)
-                i += 1
+                cadena = int(bytesObj.decode("utf-8"))
+                if cadena == -1:
+                    stop = True
+                else: 
+                    suma += cadena
+                    i += 1
+                    print(f"----> {type(cadena)} +++++> {suma}")
+                print(i)
+            #print("No bucle infinito")
             ficherosRedis.rpush('Resultados', suma)
 
 
