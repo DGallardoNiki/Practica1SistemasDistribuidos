@@ -58,8 +58,10 @@ class WordCount(archivoServer.WordCountServicer):
         while ficherosRedis.llen('Resultados') > 0:
             resultado = ficherosRedis.lpop('Resultados')
             if resultado != None and resultado != "":
-                resultado = resultado.decode("utf-8")
-                resultados += resultado
+                resultados = resultado.decode("utf-8")
+                resultados += resultados + " "
+                print(resultados)
+        resultados = resultados[:-1]
         return archivoClient.fileData(fileData=resultados)
 
 

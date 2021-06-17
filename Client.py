@@ -29,11 +29,10 @@ def runClient():
         while option != 6:
             if 0 < option < 3:
                 file = file[:-1]
-                response = stub.crearContenido(archivoCliente.filesAndOptions(files=file, option=option))
+                contenidoFichero = stub.response(archivoCliente.fileData(fileData=""))
             if option == 3:
                 response = stub.elContador(archivoCliente.getInformation(fileName="", option=option, idWorker=0))
                 print(response.fileData)
-            contenidoFichero = stub.response(archivoCliente.fileData(fileData=""))
             file = ""
             option = menuSelect()
 
