@@ -124,7 +124,6 @@ def iniciarWorker(idWorker):
         if ficherosRedis.llen('Fichero') == 0 and ficherosRedis.llen('Resultados') > 0 and option == 1:
             lista = ""
             while i < ficherosRedis.llen('Resultados'):
-                print(f"*******> {ficherosRedis.llen('Resultados')}")
                 lista = ficherosRedis.lrange('Resultados', 0, -1)
                 bytesObj = lista[i]
                 cadena = bytesObj.decode("utf-8")

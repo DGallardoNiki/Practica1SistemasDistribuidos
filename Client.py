@@ -34,8 +34,10 @@ def runClient():
                 stop = False
                 while not stop:
                     parar = stub.reponseData(archivoCliente.fileData(fileData=cantidad))
-                    if parar == '0':
+                    
+                    if parar.fileData == "0":
                         stop =  True
+                        print("Hey guapo")
                 respuestaResultados = stub.response(archivoCliente.fileData(fileData = cantidad))
                 print(respuestaResultados.fileData)
 
