@@ -27,22 +27,23 @@ def runClient():
             response = stub.crearWorkers(archivoCliente.ctosWorkers(nWorkers=nWorkers))
         option = menuSelect()
         file = file[:-1]
-        while suma != 50:
+        while option != 6:
             if 0 < option < 3:
-                contenidoFichero = "1"
                 response = stub.crearContenido(archivoCliente.filesAndOptions(files=file, option=option))
                 cantidad = response.fileData
-                #while contenidoFichero != "fileData: - ":
-                #    contenidoFichero = stub.response(archivoCliente.fileData(fileData=""))
-                #    print(contenidoFichero)
+                stop = False
+                while not stop:
+                    parar = stub.reponseData(archivoCliente.fileData(fileData=cantidad))
+                    if parar == '0':
+                        stop =  True
+                respuestaResultados = stub.response(archivoCliente.fileData(fileData = cantidad))
+                print(respuestaResultados.fileData)
+
             if option == 3:
                 response = stub.elContador(archivoCliente.getInformation(fileName="", option=option, idWorker=0))
                 print(response.fileData)
-            print(type(cantidad))
-            contenidoFichero = stub.response(archivoCliente.fileData(fileData=cantidad))
-            suma += 1
             file = ""
-            #option = menuSelect()
+            option = menuSelect()
 
 
 

@@ -15,6 +15,12 @@ ficherosRedis = redis.StrictRedis(host='localhost', port=6379, db=0)
 option = 0
 responseContenido = ""
 class WordCount(archivoServer.WordCountServicer):
+    def reponseData (self, request, context):
+        parar = "1"
+        if ficherosRedis.llen('Fichero') == 0 and ficherosRedis.llen('Resultados') == (int(request.fileData) + 1):
+            parar = "0"
+        return archivoClient.fileData(fileData=parar)
+
     # Add nombre de los ficheros a la cola del redis
     def crearContenido(self, request, context):
         global ficherosRedis
@@ -57,10 +63,10 @@ class WordCount(archivoServer.WordCountServicer):
         global ficherosRedis
         resultados = ""
         cantidad = int(request.fileData)
-        print(f"Me llega un total de --> " {cantidad})
+        print(f"Me llega un total de --> {cantidad}")
         valores = False
         i = 0
-        while ficherosRedis.llen('Resultados') > 0 and ficherosRedis.llen('Ficheros') == 0 and i < cantidad:
+        while ficherosRedis.llen('Resultados') > 0 and ficherosRedis.llen('Fichero') == 0 and i < cantidad:
             print("Hola, hay resultados y no hay tareas")
             valores = True
             resultado = ficherosRedis.lpop('Resultados')
@@ -115,9 +121,10 @@ def iniciarWorker(idWorker):
                 
                 responseContenido = archivoPython.WordCount(nombreFichero[1], option)
                 ficherosRedis.rpush('Resultados', responseContenido)
-        if ficherosRedis.llen('Ficheros') == 0 and ficherosRedis.llen('Resultados') > 0 and option == 1:
+        if ficherosRedis.llen('Fichero') == 0 and ficherosRedis.llen('Resultados') > 0 and option == 1:
             lista = ""
             while i < ficherosRedis.llen('Resultados'):
+                print(f"*******> {ficherosRedis.llen('Resultados')}")
                 lista = ficherosRedis.lrange('Resultados', 0, -1)
                 bytesObj = lista[i]
                 cadena = bytesObj.decode("utf-8")
