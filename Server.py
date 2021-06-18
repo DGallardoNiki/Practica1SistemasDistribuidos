@@ -1,20 +1,47 @@
-import WordCount_pb2 as archivoClient
-import WordCount_pb2_grpc as archivoServer
-import ArchivoContador as archivoPython
+# Librerias para la ejecucion del programa
 import grpc
+import redis
 from concurrent import futures
 from multiprocessing import Process
-import redis
-from os import system
+# Librerias generadas o implementadas por nosotors
+import WordCount_pb2 as archivoStub
+import WordCount_pb2_grpc as archivoServer
+import archivoContador as contador
 
-WORKERS = []
-WORKERS_ID = 0
-suma_palabras = 0
-concurrenciaPalabras = ""
-ficherosRedis = redis.StrictRedis(host='localhost', port=6379, db=0)
-option = 0
-responseContenido = ""
+# Variables globales
+listaWorkers = []
+idWorker = 0
+colaRedis = redis.StrictRedis(host='localhost', port=6379, db=0)
+
+
 class WordCount(archivoServer.WordCountServicer):
+    # Servicio que permite adjuntar diferentes ficheros a la cola de estos
+    def createQueue(self, request, context):
+        global colaRedis
+        colaRedis.flushdb()
+        cantidadFicheros = 0
+        files = request.files
+        option = request.option
+        files = files.split(" ")
+        cantidadFicheros = len(files)
+        i = 0
+        for i in range(cantidadFicheros):
+            if option == 1:
+                aux = "CW "+files[i]+" "+str(len(files))
+            else:
+                aux = "WC "+files[i]+" "+str(len(files))
+            colaRedis.rpush('keyFichero', aux)
+        files = ""
+        return archivoStub.returnsString(cadena=str(cantidadFicheros))
+    # Servicio que permite crear una cantidad de workers especificada por el usuario
+    def createWorkers(self, request, context):
+        global colaRedis
+        nWorkers = request.cadena
+        nWorkers = int(nWorkers)
+        for i in range(nWorkers):
+            createWorker()
+        return archivoStub.returnsString(cadena=str(nWorkers))
+
     def reponseData (self, request, context):
         parar = "1"
         #print(f"-----> Ficheros {ficherosRedis.llen('Fichero')}")

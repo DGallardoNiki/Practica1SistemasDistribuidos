@@ -1,36 +1,31 @@
 syntax = "proto3";
+// someOpc       --> permite tratar las opciones 3, 4, 5
+// createQueue   --> permite crear la cola de ficheros dependido de la opcion pasada
+// createWorkers --> crea x workers dependiendo del parametro
+// checkQueue    --> sabremos como se encuentran las colas en x momento
 
-// Servicio que se encarga de recibir la opcion escogida y con la cual el servidor actuara,
-//	tambien se encarga de retornar un mensaje vacio en el caso de que no necesitemos
-//	retornar nada, como puede ser despu├ęs de poner un worker mas o algo por el estilo.
 service WordCount{
-	rpc elContador (getInformation) returns (fileData){}
-	rpc crearContenido (filesAndOptions) returns (fileData){}
-	rpc reponseData (fileData) returns (fileData){}
-	rpc crearWorkers (ctosWorkers) returns (fileData){}
-	rpc mensajeVacio (emptyData) returns (emptyData){}
-
-	rpc redisList (filesAndOptions) returns (fileData){}
-	rpc workerCreate (ctosWorkers) returns (fileData){}
-	rpc response (fileData) returns (fileData){}
-}
-message getInformation{
-	string fileName = 1;
-	int32 option = 2;
-	int32 idWorker = 3;
+	rpc someOpc(noCount) returns (returnsString){}
+	rpc createQueue (yesCount) returns (returnsString){}
+	rpc createWorkers (returnsString) returns (returnsString){}
+	rpc checkQueue (returnsString) returns (returnsString){}
+	rpc popResponse(returnsString) returns (returnsString){}
 }
 
-message ctosWorkers{
-	int32 nWorkers = 1;
-}
-message fileData{
-	string fileData = 1;
+// Mensaje que permite recibir la opcion escogida y el worker. Esta relacionada con las opciones 3, 4, 5
+// 3 -> Mostrar lista de workers
+// 4 -> Crear un nuevo worker
+// 5 -> Borrar un worker, por eso necesitamos idW, que sera el id del worker a borrar
+message noCount{
+	int32 opc = 1;
+	int32 idW = 2;
 }
 
-message filesAndOptions{
+message yesCount{
 	string files = 1;
 	int32 option = 2;
 }
-message emptyData{
-	string emptyMessage = 1;
+
+message returnsString{
+	string cadena = 1;
 }
