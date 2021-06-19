@@ -109,9 +109,7 @@ def createWorker():
 def killWorker(idW):
     global idWorker
     global listaWorkers
-    for i in range(len(listaWorkers)):
-        if (listaWorkers[i]):
-            print(listaWorkers[i])
+    listaWorkers[idW].kill() 
 
 def workerLogic():
     global colaRedis
