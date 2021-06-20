@@ -45,16 +45,13 @@ class WordCount(archivoServer.WordCountServicer):
     def popResponse(self, request, context):
         global colaRedis
         auxString = ""
-        print(colaRedis.llen('keyResultado'))
         while colaRedis.llen('keyResultado') > 0:
-            print(f"Antes del pop --> {colaRedis.lrange('keyResultado', 0, -1)}")
             auxResultado = colaRedis.lpop('keyResultado')           
             if auxResultado != None and auxResultado != "":
                 auxResultado = auxResultado.decode("utf-8")
                 auxString += auxResultado + " "
         if auxString != "":
            auxString = auxString[:-1]
-        print(f"Despues del pop --> {colaRedis.lrange('keyResultado', 0, -1)}")
         colaRedis.flushall()
         colaRedis.flushdb()
         return archivoStub.returnsString(cadena=auxString)
