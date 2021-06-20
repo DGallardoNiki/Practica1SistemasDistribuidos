@@ -31,21 +31,23 @@ def startClient():
             while i < cantidadArchivos:
                 files += sys.argv[i]+" "
                 i += 1
-
-            if cantidadArchivos == 1:
-                insertarRespuesta = stub.createQueue(archivoStub.yesCount(files=files, option=option))
-                resultadoFichero = stub.popResponse(archivoStub.returnsString(cadena=""))
-                print("El resultado de el fichero unico {file} es {resultadoFichero.cadena}")
-            if cantidadArchivos > 1:
-                files = files[:-1]
-                insertarRespuesta = stub.createQueue(archivoStub.yesCount(files=files, option=option))
-                aux = stub.checkQueue(archivoStub.returnsString(cadena=""))
-                while aux.cadena != "1":
+            if cantidadArchivos == 0:
+                print("No se han introducido fichero para analizar")
+            else:
+                if cantidadArchivos == 1:
+                    insertarRespuesta = stub.createQueue(archivoStub.yesCount(files=files, option=option))
+                    resultadoFichero = stub.popResponse(archivoStub.returnsString(cadena=""))
+                    print("El resultado de el fichero unico {file} es {resultadoFichero.cadena}")
+                if cantidadArchivos > 1:
+                    files = files[:-1]
+                    insertarRespuesta = stub.createQueue(archivoStub.yesCount(files=files, option=option))
                     aux = stub.checkQueue(archivoStub.returnsString(cadena=""))
-                while aux.cadena != "3":
-                    resultadoFichero =  stub.popResponse(archivoStub.returnsString(cadena=""))
-                    aux = stub.checkQueue(archivoStub.returnsString(cadena=""))
-                print(resultadoFichero.cadena)
+                    while aux.cadena != "1":
+                        aux = stub.checkQueue(archivoStub.returnsString(cadena=""))
+                    while aux.cadena != "3":
+                        resultadoFichero =  stub.popResponse(archivoStub.returnsString(cadena=""))
+                        aux = stub.checkQueue(archivoStub.returnsString(cadena=""))
+                    print(resultadoFichero.cadena)
         
 
 if __name__ == '__main__':
