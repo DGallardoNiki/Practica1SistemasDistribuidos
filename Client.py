@@ -1,81 +1,52 @@
-import WordCount_pb2 as archivoCliente
+# Librerias generadas o implementadas por nosotors
+import WordCount_pb2 as archivoStub
 import WordCount_pb2_grpc as archivoServer
-import ArchivoContador as archivoPython
+import archivoContador as contador
+
+# Librerias para la ejecucion del programa
 import grpc
-from concurrent import futures
-import redis
-file = ""
-workerID = 0
-primeraInt = True
-ficheroRedis = redis.StrictRedis(host='localhost', port=6379, db=0)
-
-def runClient():
+import sys
+# Variables globales
+def startClient():
     with grpc.insecure_channel('localhost:50051') as channel:
-        global workerID
-        global file
-        global ficheroRedis
+        files = ""
+        stop = False
         stub = archivoServer.WordCountStub(channel)
-        suma = 0
-        valor = 0
-        nWorkers = 0
-        option = 0
-        cantidad = ""
-        #print(ficheroRedis.lrange('Resultados', 0, -1)
+        #print("Opciones: 1. Palabras diferentes 2. Concurrencia palabras 3. Mostrar Workers 4. Crear Worker 5. Eliminar Worker")
+        #print("Si se escoge la opcion --> 1/2: ficheros a pasar 3/4: nada mas 5: idWorker")
+        #print("parametros: 1: nWorkers 2: opcion 3: idWorker/ficheros 4..n: ficheron")
+        nWorkers = sys.argv[1]
+        resultadoWorkers = stub.createWorkers(archivoStub.returnsString(cadena=nWorkers))
+        option = int(sys.argv[2])
+        if option == 3 or option == 4:
+            respuesta = stub.someOpc(archivoStub.noCount(opc=option, idW=0))
+            print(respuesta.cadena)
+        if option == 5:
+            idW = int(sys.argv[3])
+            respuesta =  stub.someOpc(archivoStub.noCount(opc=option, idW=idW))
+            print(respues.cadena)
+        if option == 1 or option == 2:
+            i = 3
+            cantidadArchivos = len(sys.argv)
+            while i < cantidadArchivos:
+                files += sys.argv[i]+" "
+                i += 1
 
-        if primeraInt:
-            nWorkers = workerSelect()
-            response = stub.crearWorkers(archivoCliente.ctosWorkers(nWorkers=nWorkers))
-        option = menuSelect()
-        file = file[:-1]
-        while option != 6:
-            if 0 < option < 3:
-                response = stub.crearContenido(archivoCliente.filesAndOptions(files=file, option=option))
-                respuestaResultados = stub.response(archivoCliente.fileData(fileData = cantidad))
-                if  option == 1 :
-                    cantidad = response.fileData
-                    stop = False
-                    while not stop:
-                        parar = stub.reponseData(archivoCliente.fileData(fileData=cantidad))
-                        
-                        if parar.fileData == "0":
-                            stop =  True
-                            print("Hey guapo")
-                
-                print(respuestaResultados.fileData)
+            if cantidadArchivos == 1:
+                insertarRespuesta = stub.createQueue(archivoStub.yesCount(files=files, option=option))
+                resultadoFichero = stub.popResponse(archivoStub.returnsString(cadena=""))
+                print("El resultado de el fichero unico {file} es {resultadoFichero.cadena}")
+            if cantidadArchivos > 1:
+                files = files[:-1]
+                insertarRespuesta = stub.createQueue(archivoStub.yesCount(files=files, option=option))
+                aux = stub.checkQueue(archivoStub.returnsString(cadena=""))
+                while aux.cadena != "1":
+                    aux = stub.checkQueue(archivoStub.returnsString(cadena=""))
+                while aux.cadena != "3":
+                    resultadoFichero =  stub.popResponse(archivoStub.returnsString(cadena=""))
+                    aux = stub.checkQueue(archivoStub.returnsString(cadena=""))
+                print(resultadoFichero.cadena)
+        
 
-            if option == 3:
-                response = stub.elContador(archivoCliente.getInformation(fileName="", option=option, idWorker=0))
-                print(response.fileData)
-            file = ""
-            option = menuSelect()
-
-
-
-def workerSelect():
-    global primeraInt
-    primeprimeraInt = False
-    return int(input("Introduzca el numero de Workers que se crearan: "))
-
-def menuSelect():
-    global file
-    global workerID
-    print("1. Contar palabras diferentes")
-    print("2. Contar la concurrencias de las diferentes palabras")
-    print("3. Mostrar Workers activos")
-    print("4. Add worker")
-    print("5. Eliminar workers")
-    print("6. Salir del servidor")
-
-    option = int(input("Introduza una opcion: "))
-    if option > 0 and option < 3:
-        cantidad = int(input("Cuantos ficheros analizara?: "))
-        i = 0
-        for i in range (i, cantidad):
-            file += input(f"Introduzca el nombre del fichero {i+1}:") + " "
-    if option == 5:
-        workerID = int(input("Introduzca el ID del worker a borrar: "))
-
-    return option
-
-if __name__ == "__main__":
-    runClient()
+if __name__ == '__main__':
+    startClient()
